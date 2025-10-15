@@ -144,16 +144,16 @@ namespace REST_Services.Controllers
         }
 
         [HttpGet("SearchPatientByEmail")]
-        public ActionResult<List<PatientDetails>> SearchPatientEmail(string location)
+        public ActionResult<List<PatientDetails>> SearchPatientEmail(string email)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(location))
+                if (string.IsNullOrWhiteSpace(email))
                 {
                     return BadRequest("Invalid email.");
                 }
 
-                List<PatientDetails> matchedPatients = manager.SearchByEmail(location);
+                List<PatientDetails> matchedPatients = manager.SearchByEmail(email);
 
                 if (matchedPatients == null || !matchedPatients.Any())
                 {
