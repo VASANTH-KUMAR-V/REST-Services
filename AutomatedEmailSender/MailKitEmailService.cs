@@ -7,12 +7,12 @@ namespace AutomatedEmailSender
 {
     public class MailKitEmailService : EmailSender
     {
-        private string GmailAppPassword;
+        
 
         public MailKitEmailService(string fromAddress, string toAddress, string ccAddress, string bccAddress, string subject, string content, string gmailAppPassword)
-            : base(fromAddress, toAddress, ccAddress, bccAddress, subject, content)
+            : base(fromAddress, toAddress, ccAddress, bccAddress, subject, content, gmailAppPassword)
         {
-            GmailAppPassword = gmailAppPassword;
+           
         }
 
         public override void SendEmail()

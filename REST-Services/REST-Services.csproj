@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Sheduled Jobs\AutomatedEmailSender\AutomatedEmailSender.csproj" />
+    <ProjectReference Include="..\AutomatedEmailSender\AutomatedEmailSender.csproj" />
     <ProjectReference Include="..\PatientLibrary\PatientLibrary.csproj" />
   </ItemGroup>
 
