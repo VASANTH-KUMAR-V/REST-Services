@@ -66,6 +66,7 @@ namespace PatientLibrary
         }
 
         public List<PatientDetails> GetAllPatients() => patients;
+
         public List<PatientDetails> SearchByName(string name)
         {
             if (string.IsNullOrWhiteSpace(name))

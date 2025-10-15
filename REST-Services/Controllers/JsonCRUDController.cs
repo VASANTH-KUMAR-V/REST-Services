@@ -115,5 +115,137 @@ namespace REST_Services.Controllers
                 return StatusCode(500, $"An error occurred while updating the patient. {ex.Message}"); // 500 Internal Server Error
             }
         }
+
+        // GET api/JsonCRUD/SearchPatient/{name}
+        [HttpGet("SearchPatientByName/{name}")]
+        public ActionResult<List<PatientDetails>> SearchPatientName(string name)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(name))
+                {
+                    return BadRequest("Invalid name.");
+                }
+
+                List<PatientDetails> matchedPatients = manager.SearchByName(name);
+
+                if (matchedPatients == null || !matchedPatients.Any())
+                {
+                    return NotFound("No patient found with the given name.");
+                }
+
+                return Ok(matchedPatients);
+            }
+            catch (Exception ex)
+            {
+                // Return HTTP 500 Internal Server Error with exception message
+                return StatusCode(500, $"Patient not added: {ex.Message}");
+            }
+        }
+
+        [HttpGet("SearchPatientByLocation/{email}")]
+        public ActionResult<List<PatientDetails>> SearchPatientEmail(string location)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(location))
+                {
+                    return BadRequest("Invalid email.");
+                }
+
+                List<PatientDetails> matchedPatients = manager.SearchByEmail(location);
+
+                if (matchedPatients == null || !matchedPatients.Any())
+                {
+                    return NotFound("No patient found with the given email.");
+                }
+
+                return Ok(matchedPatients);
+            }
+            catch (Exception ex)
+            {
+                // Return HTTP 500 Internal Server Error with exception message
+                return StatusCode(500, $"Patient not added: {ex.Message}");
+            }
+        }
+
+
+        [HttpGet("SearchPatientByEmail/{location}")]
+        public ActionResult<List<PatientDetails>> SearchPatientLocation(string location)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(location))
+                {
+                    return BadRequest("Invalid email.");
+                }
+
+                List<PatientDetails> matchedPatients = manager.SearchByLocation(location);
+
+                if (matchedPatients == null || !matchedPatients.Any())
+                {
+                    return NotFound("No patient found with the given email.");
+                }
+
+                return Ok(matchedPatients);
+            }
+            catch (Exception ex)
+            {
+                // Return HTTP 500 Internal Server Error with exception message
+                return StatusCode(500, $"Patient not added: {ex.Message}");
+            }
+        }
+
+
+        [HttpGet("SearchPatientByMobile/{mobile}")]
+        public ActionResult<List<PatientDetails>> SearchPatientMobile(long mobile)
+        {
+            try
+            {
+                if (mobile <= 0)
+                {
+                    return BadRequest("Invalid mobile number.");
+                }
+
+                List<PatientDetails> matchedPatients = manager.SearchByMobile(mobile);
+
+                if (matchedPatients == null || !matchedPatients.Any())
+                {
+                    return NotFound("No patient found with the given mobile number.");
+                }
+
+                return Ok(matchedPatients);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server error: {ex.Message}");
+            }
+        }
+
+        //[HttpGet("SearchPatientByAge/{age}")]
+        //public ActionResult<List<PatientDetails>> SearchPatientAge(int age)
+        //{
+        //    try
+        //    {
+        //        if (age <= 0)
+        //        {
+        //            return BadRequest("Invalid Age.");
+        //        }
+
+        //        List<PatientDetails> matchedPatients = manager.SearchByAge(age);
+
+        //        if (matchedPatients == null || !matchedPatients.Any())
+        //        {
+        //            return NotFound("No patient found with the given Age.");
+        //        }
+
+        //        return Ok(matchedPatients);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, $"Server error: {ex.Message}");
+        //    }
+        //}
+
     }
 }
