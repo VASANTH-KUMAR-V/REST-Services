@@ -117,7 +117,7 @@ namespace REST_Services.Controllers
         }
 
         // GET api/JsonCRUD/SearchPatient/{name}
-        [HttpGet("SearchPatientByName/{name}")]
+        [HttpGet("SearchPatientByName")]
         public ActionResult<List<PatientDetails>> SearchPatientName(string name)
         {
             try
@@ -143,7 +143,7 @@ namespace REST_Services.Controllers
             }
         }
 
-        [HttpGet("SearchPatientByLocation/{email}")]
+        [HttpGet("SearchPatientByEmail")]
         public ActionResult<List<PatientDetails>> SearchPatientEmail(string location)
         {
             try
@@ -170,21 +170,21 @@ namespace REST_Services.Controllers
         }
 
 
-        [HttpGet("SearchPatientByEmail/{location}")]
+        [HttpGet("SearchPatientByLocation")]
         public ActionResult<List<PatientDetails>> SearchPatientLocation(string location)
         {
             try
             {
                 if (string.IsNullOrWhiteSpace(location))
                 {
-                    return BadRequest("Invalid email.");
+                    return BadRequest("Invalid location.");
                 }
 
                 List<PatientDetails> matchedPatients = manager.SearchByLocation(location);
 
                 if (matchedPatients == null || !matchedPatients.Any())
                 {
-                    return NotFound("No patient found with the given email.");
+                    return NotFound("No patient found with the given location.");
                 }
 
                 return Ok(matchedPatients);
@@ -197,7 +197,7 @@ namespace REST_Services.Controllers
         }
 
 
-        [HttpGet("SearchPatientByMobile/{mobile}")]
+        [HttpGet("SearchPatientByMobile")]
         public ActionResult<List<PatientDetails>> SearchPatientMobile(long mobile)
         {
             try
