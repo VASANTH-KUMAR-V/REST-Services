@@ -2,10 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using PatientLibrary;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace REST_Services.Controllers
 {
@@ -15,23 +12,25 @@ namespace REST_Services.Controllers
     {
         private readonly PatientManager manager = new PatientManager();
 
-        // GET: api/<JsonCRUDController>
+        // GET: api/JsonCRUD
         [HttpGet]
-        public IEnumerable<PatientDetails> Get()
+        public ActionResult<IEnumerable<PatientDetails>> Get()
         {
             var patients = manager.GetAllPatients();
-            return patients;
+            return Ok(patients);
         }
 
-        // GET api/<JsonCRUDController>/5
-        [HttpGet("Select/{patientId}")]
-        public PatientDetails Get(long id)
+        // GET api/JsonCRUD/Select/5
+        [HttpGet("Select/{id}")]
+        public ActionResult<PatientDetails> Get(long id)
         {
-            var patients = manager.GetAllPatients();
-            return patients.FirstOrDefault(p => p.Id == id);
+            var patient = manager.GetAllPatients().FirstOrDefault(p => p.Id == id);
+            if (patient == null)
+                return NotFound($"Patient with Id={id} not found.");
+            return Ok(patient);
         }
 
-        // POST api/<JsonCRUDController>
+        // POST api/JsonCRUD
         [HttpPost]
         public ActionResult<PatientDetails> Post([FromBody] PatientDetails patient)
         {
@@ -40,7 +39,6 @@ namespace REST_Services.Controllers
                 var allPatients = manager.GetAllPatients();
                 if (allPatients.Any(p => p.Mobile == patient.Mobile || p.Email == patient.Email))
                 {
-                    // Return HTTP 409 Conflict with message
                     return Conflict("A patient with the same mobile or email already exists.");
                 }
 
@@ -56,20 +54,16 @@ namespace REST_Services.Controllers
 
                 manager.AddPatient(newPatient);
 
-                // Return HTTP 201 Created with new patient's data and location header
-                //return CreatedAtAction(nameof(GetById), new { id = newPatient.Id }, newPatient);
-                return StatusCode(500, $"Patient  added Successfully");
+                return CreatedAtAction(nameof(Get), new { id = newPatient.Id }, newPatient);
             }
             catch (Exception ex)
             {
-                // Return HTTP 500 Internal Server Error with exception message
                 return StatusCode(500, $"Patient not added: {ex.Message}");
             }
         }
 
-
-        // PUT api/<controller>/5
-        [HttpPut("Update/{patientId}")]
+        // PUT api/JsonCRUD/Update/5
+        [HttpPut("Update")]
         public IActionResult Put(long id, [FromBody] PatientDetails patient)
         {
             try
@@ -79,24 +73,23 @@ namespace REST_Services.Controllers
                     existingPatient.Name = patient.Name;
                     existingPatient.Age = patient.Age;
                     existingPatient.Location = patient.Location;
+                    //existingPatient.Email = patient.Email;
+                    //existingPatient.Mobile = patient.Mobile;
                 });
 
                 if (isUpdated)
-                    return Ok("Patient Details Updated successfully");           // 200 OK
+                    return Ok("Patient details updated successfully.");
                 else
-                    return NotFound("The Patient Id is Not Matched");     // 404 Not Found if patient not found
+                    return NotFound($"Patient with Id={id} not found.");
             }
             catch (Exception ex)
             {
-
-                return StatusCode(500, $"An error occurred while updating the patient. {ex.Message}"); // 500 Internal Server Error
+                return StatusCode(500, $"Error updating patient: {ex.Message}");
             }
         }
 
-
-
-        // DELETE api/<JsonCRUDController>/5
-        [HttpDelete("Remove/{patientId}")]
+        // DELETE api/JsonCRUD/Remove/5
+        [HttpDelete("Delete")]
         public IActionResult Delete(long id)
         {
             try
@@ -104,19 +97,17 @@ namespace REST_Services.Controllers
                 bool isRemoved = manager.RemovePatient(id);
 
                 if (isRemoved)
-                    return Ok("Patient Details Deleted successfully");           // 200 OK
+                    return Ok("Patient details deleted successfully.");
                 else
-                    return NotFound("The Patient Id is Not Matched");
+                    return NotFound($"Patient with Id={id} not found.");
             }
-
             catch (Exception ex)
             {
-
-                return StatusCode(500, $"An error occurred while updating the patient. {ex.Message}"); // 500 Internal Server Error
+                return StatusCode(500, $"Error deleting patient: {ex.Message}");
             }
         }
 
-        // GET api/JsonCRUD/SearchPatient/{name}
+        // GET api/JsonCRUD/SearchPatientByName?name=value
         [HttpGet("SearchPatientByName")]
         public ActionResult<List<PatientDetails>> SearchPatientName(string name)
         {
@@ -138,11 +129,11 @@ namespace REST_Services.Controllers
             }
             catch (Exception ex)
             {
-                // Return HTTP 500 Internal Server Error with exception message
-                return StatusCode(500, $"Patient not added: {ex.Message}");
+                return StatusCode(500, $"Server error: {ex.Message}");
             }
         }
 
+        // GET api/JsonCRUD/SearchPatientByEmail?email=value
         [HttpGet("SearchPatientByEmail")]
         public ActionResult<List<PatientDetails>> SearchPatientEmail(string email)
         {
@@ -164,12 +155,11 @@ namespace REST_Services.Controllers
             }
             catch (Exception ex)
             {
-                // Return HTTP 500 Internal Server Error with exception message
-                return StatusCode(500, $"Patient not added: {ex.Message}");
+                return StatusCode(500, $"Server error: {ex.Message}");
             }
         }
 
-
+        // GET api/JsonCRUD/SearchPatientByLocation?location=value
         [HttpGet("SearchPatientByLocation")]
         public ActionResult<List<PatientDetails>> SearchPatientLocation(string location)
         {
@@ -191,12 +181,11 @@ namespace REST_Services.Controllers
             }
             catch (Exception ex)
             {
-                // Return HTTP 500 Internal Server Error with exception message
-                return StatusCode(500, $"Patient not added: {ex.Message}");
+                return StatusCode(500, $"Server error: {ex.Message}");
             }
         }
 
-
+        // GET api/JsonCRUD/SearchPatientByMobile?mobile=value
         [HttpGet("SearchPatientByMobile")]
         public ActionResult<List<PatientDetails>> SearchPatientMobile(long mobile)
         {
@@ -222,30 +211,32 @@ namespace REST_Services.Controllers
             }
         }
 
-        //[HttpGet("SearchPatientByAge/{age}")]
-        //public ActionResult<List<PatientDetails>> SearchPatientAge(int age)
-        //{
-        //    try
-        //    {
-        //        if (age <= 0)
-        //        {
-        //            return BadRequest("Invalid Age.");
-        //        }
+        // Uncomment if you want to implement search by age
+        /*
+        [HttpGet("SearchPatientByAge")]
+        public ActionResult<List<PatientDetails>> SearchPatientAge(int age)
+        {
+            try
+            {
+                if (age <= 0)
+                {
+                    return BadRequest("Invalid age.");
+                }
 
-        //        List<PatientDetails> matchedPatients = manager.SearchByAge(age);
+                List<PatientDetails> matchedPatients = manager.SearchByAge(age);
 
-        //        if (matchedPatients == null || !matchedPatients.Any())
-        //        {
-        //            return NotFound("No patient found with the given Age.");
-        //        }
+                if (matchedPatients == null || !matchedPatients.Any())
+                {
+                    return NotFound("No patient found with the given age.");
+                }
 
-        //        return Ok(matchedPatients);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, $"Server error: {ex.Message}");
-        //    }
-        //}
-
+                return Ok(matchedPatients);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Server error: {ex.Message}");
+            }
+        }
+        */
     }
 }
