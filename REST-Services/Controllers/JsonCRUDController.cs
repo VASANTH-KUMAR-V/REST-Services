@@ -62,19 +62,22 @@ namespace REST_Services.Controllers
             }
         }
 
+        
         // PUT api/JsonCRUD/Update/5
-        [HttpPut("Update")]
+        [HttpPut("Update/{id}")]
         public IActionResult Put(long id, [FromBody] PatientDetails patient)
         {
             try
             {
+                if (patient == null)
+                    return BadRequest("Patient data is required.");
+
                 bool isUpdated = manager.UpdatePatient(id, existingPatient =>
                 {
+                    // Only update Name, Age, and Location
                     existingPatient.Name = patient.Name;
                     existingPatient.Age = patient.Age;
                     existingPatient.Location = patient.Location;
-                    //existingPatient.Email = patient.Email;
-                    //existingPatient.Mobile = patient.Mobile;
                 });
 
                 if (isUpdated)
@@ -88,8 +91,9 @@ namespace REST_Services.Controllers
             }
         }
 
+
         // DELETE api/JsonCRUD/Remove/5
-        [HttpDelete("Delete")]
+        [HttpDelete("Delete/{id}")]
         public IActionResult Delete(long id)
         {
             try
