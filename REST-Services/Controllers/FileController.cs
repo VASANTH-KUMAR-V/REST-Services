@@ -1,47 +1,65 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace REST_Services.Controllers
+namespace FileUploadAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FileController : ControllerBase
+    public class ImageUploadController : ControllerBase
     {
-        // GET: api/<FileController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly string uploadsFolder = @"E:\Restapi";
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile image)
         {
-            return new string[] { "value1", "value2" };
+            if (image == null || image.Length == 0)
+                return BadRequest("No image uploaded.");
+
+            // Validate image type
+            var allowedTypes = new[] { "image/jpeg", "image/png", "image/jpg" };
+            if (!allowedTypes.Contains(image.ContentType))
+                return BadRequest("Only JPG and PNG images are allowed.");
+
+            // Ensure folder exists
+            if (!Directory.Exists(uploadsFolder))
+                Directory.CreateDirectory(uploadsFolder);
+
+            var filePath = Path.Combine(uploadsFolder, image.FileName);
+
+            // Save the file
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+
+            return Ok(new
+            {
+                Message = "Image uploaded successfully!",
+                FileName = image.FileName,
+                FilePath = filePath
+            });
         }
 
-        // GET api/<FileController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("download/{fileName}")]
+        public IActionResult DownloadImage(string fileName)
         {
-            return "value";
-        }
+            if (string.IsNullOrEmpty(fileName))
+                return BadRequest("File name must be provided.");
 
-        // POST api/<FileController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
+            var filePath = Path.Combine(uploadsFolder, fileName);
 
-        // PUT api/<FileController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
+            if (!System.IO.File.Exists(filePath))
+                return NotFound("File not found.");
 
-        // DELETE api/<FileController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var fileBytes = System.IO.File.ReadAllBytes(filePath);
+
+            // Set the content type based on file extension
+            var contentType = fileName.EndsWith(".png") ? "image/png" : "image/jpeg";
+
+            return File(fileBytes, contentType, fileName);
         }
     }
 }
