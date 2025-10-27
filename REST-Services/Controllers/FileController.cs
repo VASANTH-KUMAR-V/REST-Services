@@ -10,7 +10,8 @@ namespace FileUploadAPI.Controllers
     [ApiController]
     public class ImageUploadController : ControllerBase
     {
-        private readonly string uploadsFolder = @"E:\Restapi";
+        private readonly string uploadsFolder = @"C:\Users\Anaiyaan\source\repos\REST-Services\Restapi";
+        //private readonly string uploadsFolder = @"E:\Restapi";
 
         [HttpPost("upload")]
         public async Task<IActionResult> UploadImage([FromForm] IFormFile image)
@@ -56,7 +57,7 @@ namespace FileUploadAPI.Controllers
 
             var fileBytes = System.IO.File.ReadAllBytes(filePath);
 
-            // Set the content type based on file extension
+            // Set content type based on file extension
             var contentType = fileName.EndsWith(".png") ? "image/png" : "image/jpeg";
 
             return File(fileBytes, contentType, fileName);
