@@ -1,0 +1,99 @@
+body {
+margin: 0;
+font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+background: linear-gradient(135deg, #74b9ff, #a29bfe);
+display: flex;
+justify-content: center;
+align-items: center;
+height: 100vh;
+}
+
+.auth-wrapper {
+width: 100%;
+display: flex;
+flex-direction: column;
+align-items: center;
+}
+
+.auth-nav {
+display: flex;
+gap: 25px;
+margin-bottom: 25px;
+}
+
+.auth-nav a {
+text-decoration: none;
+color: #fff;
+background-color: rgba(0, 0, 0, 0.25);
+padding: 10px 20px;
+border-radius: 8px;
+transition: background-color 0.3s ease;
+}
+
+.auth-nav a:hover {
+background-color: rgba(0, 0, 0, 0.4);
+}
+
+.auth-container {
+background-color: #fff;
+padding: 40px 35px;
+border-radius: 16px;
+box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+width: 100%;
+max-width: 400px;
+text-align: center;
+}
+
+.auth-container h2 {
+margin-bottom: 20px;
+color: #2d3436;
+font-weight: 600;
+font-size: 28px;
+}
+
+form {
+display: flex;
+flex-direction: column;
+gap: 15px;
+}
+
+input {
+padding: 12px 15px;
+border-radius: 8px;
+border: 1px solid #dcdde1;
+font-size: 15px;
+outline: none;
+transition: all 0.2s ease;
+}
+
+input:focus {
+border-color: #0984e3;
+box-shadow: 0 0 4px rgba(9, 132, 227, 0.3);
+}
+
+button {
+background-color: #0984e3;
+color: #fff;
+border: none;
+padding: 12px;
+border-radius: 8px;
+font-size: 16px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+button:hover:not(:disabled) {
+background-color: #0873c0;
+}
+
+button:disabled {
+background-color: #b2bec3;
+cursor: not-allowed;
+}
+
+@media (max-width: 500px) {
+.auth-container {
+width: 90%;
+padding: 30px 25px;
+}
+}

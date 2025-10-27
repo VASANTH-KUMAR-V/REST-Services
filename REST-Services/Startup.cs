@@ -1,16 +1,18 @@
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using UserAuthApi.Services;
-using UserAuthApi.Repositories;
+using AccountCenter.Models;
+using AccountCenter.Data;
 
 namespace REST_Services
 {
     public class Startup
     {
+        private readonly string AllowReactApp = "AllowReactApp";
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -18,23 +20,39 @@ namespace REST_Services
 
         public IConfiguration Configuration { get; }
 
-        // Add services to container
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
 
-            // Dependency Injection for Repository and Service
+            // ✅ Enable CORS for React frontend
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: AllowReactApp,
+                    builder =>
+                    {
+                        builder
+                            .WithOrigins("http://localhost:3000")
+                            .AllowAnyHeader()
+                            .AllowAnyMethod()
+                            .AllowCredentials();
+                    });
+            });
+
+            // Dependency Injection
             services.AddScoped<UserRepository>();
-            services.AddScoped<AuthService>();
+            services.AddScoped<User>();
 
             // Swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "REST_Services", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "REST_Services",
+                    Version = "v1"
+                });
             });
         }
 
-        // Configure HTTP request pipeline
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
@@ -46,7 +64,12 @@ namespace REST_Services
             }
 
             app.UseHttpsRedirection();
+
             app.UseRouting();
+
+            // ✅ Important: add before authorization
+            app.UseCors(AllowReactApp);
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
