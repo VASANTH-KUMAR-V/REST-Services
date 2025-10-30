@@ -1,4 +1,4 @@
-const API_BASE_URL = "https://localhost:5001/api/Account";
+const API_BASE_URL = "https://localhost:44303/api/Account";
 
 // ✅ General reusable POST request function
 export async function postRequest(endpoint, data) {

@@ -1,0 +1,26 @@
+.patient-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.patient-table th,
+.patient-table td {
+  padding: 12px 15px;
+  border: 1px solid #dcdde1;
+  text-align: left;
+}
+
+.patient-table th {
+  background-color: #0984e3;
+  color: #fff;
+  font-weight: 600;
+}
+
+.patient-table tr:nth-child(even) {
+  background-color: #f1f2f6;
+}
+
+.patient-table tr:hover {
+  background-color: #dfe6e9;
+}
