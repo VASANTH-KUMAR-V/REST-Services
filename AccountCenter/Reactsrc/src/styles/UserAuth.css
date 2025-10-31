@@ -1,0 +1,142 @@
+/* ===== Full Page Layout ===== */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #3a2df3, #74b9ff);
+  font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Decorative blurred circles */
+.auth-container::before,
+.auth-container::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  z-index: 0;
+}
+
+.auth-container::before {
+  width: 300px;
+  height: 300px;
+  background: #81ecec;
+  top: -80px;
+  left: -80px;
+}
+
+.auth-container::after {
+  width: 250px;
+  height: 250px;
+  background: #fab1a0;
+  bottom: -70px;
+  right: -70px;
+}
+
+/* ===== Auth Card ===== */
+.auth-box {
+  background-color: #fff;
+  padding: 45px 40px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 420px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 0.8s ease;
+}
+
+/* ===== Headings ===== */
+.auth-box h2 {
+  margin-bottom: 25px;
+  color: #2d3436;
+  font-weight: 600;
+  font-size: 26px;
+}
+
+/* ===== Form ===== */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* ===== Input Fields ===== */
+.auth-form input {
+  width: 100%;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #dcdde1;
+  font-size: 15px;
+  outline: none;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.auth-form input:focus {
+  border-color: #6c5ce7;
+  box-shadow: 0 0 8px rgba(108, 92, 231, 0.3);
+  background: #fff;
+}
+
+/* ===== Button ===== */
+.auth-form button {
+  width: 100%;
+  background: linear-gradient(135deg, #6c5ce7, #74b9ff);
+  color: #fff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.auth-form button:hover {
+  background: linear-gradient(135deg, #5b50d6, #4aa3ff);
+  transform: translateY(-1px);
+}
+
+/* ===== Text and Links ===== */
+.auth-box p {
+  font-size: 14px;
+  color: #636e72;
+  margin-top: 15px;
+}
+
+.auth-box a {
+  color: #6c5ce7;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.auth-box a:hover {
+  text-decoration: underline;
+}
+
+/* ===== Animation ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 500px) {
+  .auth-box {
+    width: 90%;
+    padding: 35px 25px;
+  }
+}

@@ -1,0 +1,134 @@
+/* ===== Full Page Layout ===== */
+.page-wrapper {
+  min-height: calc(100vh - 80px);
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #ecebeac9, #ecebeaf3);
+  font-family: "Poppins", "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Decorative blurred circles */
+.page-wrapper::before,
+.page-wrapper::after {
+  content: "";
+  position:relative;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.page-wrapper::before {
+  width: 300px;
+  height: 300px;
+  background: #81ecec;
+  top: -80px;
+  left: -80px;
+}
+
+.page-wrapper::after {
+  width: 250px;
+  height: 250px;
+  background: #fab1a0;
+  bottom: -70px;
+  right: -70px;
+}
+
+/* ===== Centered Form Wrapper (Add / Login / Signup / Update / Search Form) ===== */
+.user-form-wrapper, .user-page-wrapper{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 80px);
+  position: relative;
+  z-index: 1;
+}
+
+.user-form-container,
+.auth-box {
+  background: #fff;
+  padding: 40px 50px;
+  border-radius: 20px;
+  box-shadow: 0 10px 25px rgba(189, 84, 84, 0.1);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  animation: fadeIn 0.8s ease;
+}
+
+.user-form-container h2,
+.auth-box h2 {
+  color: #2d3436;
+  font-size: 26px;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+/* ===== Form Inputs ===== */
+.user-form input,
+.auth-form input {
+  width: 100%;
+  padding: 12px 15px;
+  margin: 8px 0;
+  border-radius: 10px;
+  border: 1px solid #dcdde1;
+  font-size: 15px;
+  outline: none;
+  background: #fafafa;
+  transition: all 0.3s ease;
+}
+
+.user-form input:focus,
+.auth-form input:focus {
+  border-color: #6c5ce7;
+  box-shadow: 0 0 8px rgba(108, 92, 231, 0.3);
+  background: #fff;
+}
+
+/* ===== Buttons ===== */
+.user-form button {
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background: linear-gradient(135deg, #6c5ce7, #74b9ff);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.user-form button:hover {
+  background: linear-gradient(135deg, #5b50d6, #4aa3ff);
+  transform: translateY(-1px);
+}
+
+
+
+
+
+/* ===== Animation ===== */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 500px) {
+  .user-form-container,
+  .auth-box {
+    width: 90%;
+    padding: 35px 25px;
+  }
+}
