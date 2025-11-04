@@ -1,98 +1,26 @@
 [
   {
     "Id": 1,
-    "Name": "naveen",
-    "Mobile": 9087876560,
-    "Age": 22,
-    "Email": "naveen@gmail.com",
-    "Location": "dharapuram"
+    "Name": "Jagadeesh",
+    "Mobile": 9344149621,
+    "Age": 30,
+    "Email": "jagaarun@gmail.com",
+    "Location": "Dharapuram"
   },
   {
     "Id": 2,
-    "Name": "Kavin",
-    "Mobile": 9382984930,
-    "Age": 22,
-    "Email": "Kavin@gmail.com",
-    "Location": "Palani"
+    "Name": "Dhinesh",
+    "Mobile": 8659403920,
+    "Age": 23,
+    "Email": "Dhinesh@gmail.com",
+    "Location": "Dharapuram"
   },
   {
     "Id": 3,
-    "Name": "Ajay",
-    "Mobile": 9087890987,
-    "Age": 33,
-    "Email": "ajay@gmail.com",
-    "Location": "Dharapuram"
-  },
-  {
-    "Id": 4,
-    "Name": "Arun",
-    "Mobile": 8293382780,
-    "Age": 25,
-    "Email": "Arun@outlook.com",
+    "Name": "Kavin",
+    "Mobile": 9809097568,
+    "Age": 23,
+    "Email": "kavin@outlook.com",
     "Location": "Palani"
-  },
-  {
-    "Id": 5,
-    "Name": "sankar",
-    "Mobile": 8293822780,
-    "Age": 25,
-    "Email": "sankarn@outlook.com",
-    "Location": "Palani"
-  },
-  {
-    "Id": 6,
-    "Name": "kamal",
-    "Mobile": 8293812780,
-    "Age": 45,
-    "Email": "kamal@gmailcom",
-    "Location": "Palani"
-  },
-  {
-    "Id": 7,
-    "Name": "praveen",
-    "Mobile": 9093812780,
-    "Age": 15,
-    "Email": "praveen@yahoo.com",
-    "Location": "Dharapuram"
-  },
-  {
-    "Id": 8,
-    "Name": "madhan",
-    "Mobile": 9090812780,
-    "Age": 26,
-    "Email": "madhan@yahoo.com",
-    "Location": "palani"
-  },
-  {
-    "Id": 9,
-    "Name": "Karan",
-    "Mobile": 9000283990,
-    "Age": 33,
-    "Email": "Karan@gmail.com",
-    "Location": "Palani"
-  },
-  {
-    "Id": 10,
-    "Name": "rohit",
-    "Mobile": 9087876543,
-    "Age": 36,
-    "Email": "hitman@gmail.com",
-    "Location": "Palani"
-  },
-  {
-    "Id": 11,
-    "Name": "Virat Kholi",
-    "Mobile": 9809876567,
-    "Age": 36,
-    "Email": "virat@gmail.com",
-    "Location": "Palani"
-  },
-  {
-    "Id": 12,
-    "Name": "Rahul",
-    "Mobile": 89898934210,
-    "Age": 30,
-    "Email": "kl@gmail.com",
-    "Location": "Dharapuram"
   }
 ]

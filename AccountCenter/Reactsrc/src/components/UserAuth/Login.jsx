@@ -6,6 +6,7 @@ import "../../styles/UserAuth.css";
 function Login() {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState(""); // ✅ For messages
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -17,11 +18,16 @@ function Login() {
     setLoading(true);
     try {
       const data = await postRequest("login", formData);
-      alert(data.message || "Login successful!");
+      setMessage(data.message || "Login successful! Redirecting...");
       localStorage.setItem("authToken", data.token || "true");
-      navigate("/add");
+
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        setMessage("");
+        navigate("/display");
+      }, 2000);
     } catch (error) {
-      alert(error.message || "Login failed");
+      setMessage(error.message || "Login failed");
     } finally {
       setLoading(false);
     }
@@ -31,6 +37,7 @@ function Login() {
     <div className="auth-container">
       <div className="auth-box">
         <h2>Login</h2>
+        {message && <p className="auth-message">{message}</p>} {/* ✅ Display message */}
         <form onSubmit={handleSubmit} className="auth-form">
           <input
             type="text"

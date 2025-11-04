@@ -120,6 +120,23 @@
 .auth-box a:hover {
   text-decoration: underline;
 }
+/* ===== Auth Message ===== */
+.auth-message {
+  background-color: #d4edda; /* Light green background for success */
+  color: #155724;            /* Dark green text */
+  padding: 10px 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  font-weight: 500;
+  text-align: center;
+  animation: fadeIn 0.4s ease;
+}
+
+/* Optional fadeIn animation */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 /* ===== Animation ===== */
 @keyframes fadeIn {

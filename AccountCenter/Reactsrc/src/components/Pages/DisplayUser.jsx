@@ -9,12 +9,9 @@ const DisplayUser = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState({
-    id: "",
-    name: "",
-    age: "",
-    location: "",
-  });
+  const [selectedPatient, setSelectedPatient] = useState({ id: "", name: "", age: "", location: "" });
+  const [message, setMessage] = useState(""); // For success/error messages
+  const [confirmDeleteId, setConfirmDeleteId] = useState(null); // For delete confirmation
 
   const navigate = useNavigate();
 
@@ -34,17 +31,7 @@ const DisplayUser = () => {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this patient?")) {
-      try {
-        await deletePatient(id);
-        setPatients(patients.filter((p) => p.id !== id));
-      } catch (error) {
-        alert("Failed to delete patient");
-      }
-    }
-  };
-
+  // ===== UPDATE PATIENT =====
   const handleEditClick = (patient) => {
     setSelectedPatient(patient);
     setShowPopup(true);
@@ -53,22 +40,48 @@ const DisplayUser = () => {
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
-      const updated = await updatePatient(selectedPatient.id, {
+      await updatePatient(selectedPatient.id, {
         name: selectedPatient.name,
         age: selectedPatient.age,
         location: selectedPatient.location,
       });
-      alert(`Patient ${selectedPatient.id} updated successfully!`);
-      console.log(updated);
+
+      setMessage("✅ Patient updated successfully!");
       setShowPopup(false);
-      fetchPatients(); // refresh table
+
+      setTimeout(() => {
+        setMessage("");
+        fetchPatients();
+      }, 2000);
     } catch (err) {
-      alert(`Update failed: ${err.message}`);
+      setMessage(`❌ Update failed: ${err.message}`);
+      setTimeout(() => setMessage(""), 3000);
     }
   };
 
-  if (loading) return <p style={{ textAlign: "center", marginTop: "50px" }}>Loading patients...</p>;
-  if (error) return <p style={{ color: "red", textAlign: "center", marginTop: "50px" }}>{error}</p>;
+  // ===== DELETE PATIENT =====
+  const handleDelete = async (id) => {
+    setConfirmDeleteId(id); // Show inline confirmation instead of alert
+  };
+
+  const confirmDelete = async (id) => {
+    try {
+      await deletePatient(id);
+      setPatients(patients.filter((p) => p.id !== id));
+      setMessage("✅ Patient removed successfully!");
+      setConfirmDeleteId(null);
+
+      setTimeout(() => setMessage(""), 2000);
+    } catch (err) {
+      setMessage(`❌ Failed to delete patient: ${err.message}`);
+      setTimeout(() => setMessage(""), 3000);
+    }
+  };
+
+  const cancelDelete = () => setConfirmDeleteId(null);
+
+  if (loading) return <p className="center-text">Loading patients...</p>;
+  if (error) return <p className="error-text center-text">{error}</p>;
 
   return (
     <div className="display-wrapper">
@@ -85,6 +98,9 @@ const DisplayUser = () => {
             </button>
           </div>
         </div>
+
+        {/* ===== MESSAGE ===== */}
+        {message && <p className="success-message">{message}</p>}
 
         {/* ===== TABLE ===== */}
         {patients.length === 0 ? (
@@ -116,9 +132,21 @@ const DisplayUser = () => {
                       <button className="icon-btn edit" onClick={() => handleEditClick(patient)}>
                         <Pencil size={18} />
                       </button>
-                      <button className="icon-btn delete" onClick={() => handleDelete(patient.id)}>
-                        <X size={18} />
-                      </button>
+
+                      {confirmDeleteId === patient.id ? (
+                        <>
+                          <button className="icon-btn confirm" onClick={() => confirmDelete(patient.id)}>
+                            Confirm
+                          </button>
+                          <button className="icon-btn cancel" onClick={cancelDelete}>
+                            Cancel
+                          </button>
+                        </>
+                      ) : (
+                        <button className="icon-btn delete" onClick={() => handleDelete(patient.id)}>
+                          <X size={18} />
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}

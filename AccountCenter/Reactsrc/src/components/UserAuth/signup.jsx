@@ -10,7 +10,7 @@ function Signup() {
     email: "",
     password: "",
   });
-
+  const [message, setMessage] = useState(""); // ✅ For messages
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -19,17 +19,24 @@ function Signup() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      await signupUser(formData);
+      setMessage("Signup successful! Redirecting to login...");
 
-   await signupUser(formData);
-alert("Signup successful!");
-navigate("/login");
-
+      setTimeout(() => {
+        setMessage("");
+        navigate("/login");
+      }, 2000);
+    } catch (error) {
+      setMessage(error.message || "Signup failed");
+    }
   };
 
   return (
     <div className="auth-container">
       <div className="auth-box">
         <h2>Signup</h2>
+        {message && <p className="auth-message">{message}</p>} {/* ✅ Display message */}
         <form onSubmit={handleSubmit} className="auth-form">
           <input
             type="text"

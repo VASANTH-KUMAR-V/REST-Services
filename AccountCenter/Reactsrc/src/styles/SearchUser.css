@@ -1,3 +1,4 @@
+/* ===== Search Wrapper ===== */
 .search-wrapper {
   padding: 50px 20px;
   min-height: calc(100vh - 80px);
@@ -5,8 +6,10 @@
   justify-content: center;
   align-items: flex-start;
   font-family: "Poppins", sans-serif;
+  background-color: #f2f4f7;
 }
 
+/* ===== Search Container ===== */
 .search-container {
   background: #fff;
   padding: 40px 30px;
@@ -24,6 +27,7 @@
   font-weight: 600;
 }
 
+/* ===== Search Form ===== */
 .search-form {
   display: flex;
   flex-wrap: wrap;
@@ -39,6 +43,13 @@
   flex: 1 1 200px;
   min-width: 150px;
   font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.search-form input:focus {
+  border-color: #6c5ce7;
+  outline: none;
+  box-shadow: 0 0 5px rgba(108, 92, 231, 0.3);
 }
 
 .search-form button {
@@ -49,18 +60,26 @@
   color: #fff;
   cursor: pointer;
   font-size: 14px;
-  transition: background 0.3s;
+  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .search-form button:hover {
   background-color: #5a4dcf;
+  transform: translateY(-2px);
 }
 
+.search-form button:active {
+  transform: translateY(1px);
+}
+
+/* ===== Error Text ===== */
 .error-text {
   color: red;
   margin-bottom: 20px;
+  font-weight: 500;
 }
 
+/* ===== Table Container ===== */
 .table-container {
   overflow-x: auto;
   border-radius: 15px;
@@ -103,9 +122,39 @@
   margin: 5px 0;
 }
 
+/* ===== Go Back Button ===== */
+.go-back-btn {
+  background-color: #0984e3;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.go-back-btn:hover {
+  background-color: #076fbb;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.go-back-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== Responsive ===== */
 @media (max-width: 768px) {
   .search-form {
     flex-direction: column;
+  }
+  .search-form input,
+  .search-form button {
+    width: 100%;
   }
   .results-table th,
   .results-table td {
