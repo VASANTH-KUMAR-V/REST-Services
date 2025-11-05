@@ -1,17 +1,19 @@
+// src/components/Pages/DisplayUser.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getAllPatients, deletePatient, updatePatient } from "../../api/Crudapi";
+import { getAllPatients } from "../../api/Crudapi";
 import "../../styles/DisplayUser.css";
 import { Plus, Pencil, X, Search } from "lucide-react";
+import UpdateUser from "./UpdateUser";
+import RemoveUser from "./RemoveUser";
 
 const DisplayUser = () => {
   const [patients, setPatients] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showPopup, setShowPopup] = useState(false);
-  const [selectedPatient, setSelectedPatient] = useState({ id: "", name: "", age: "", location: "" });
-  const [message, setMessage] = useState(""); // For success/error messages
-  const [confirmDeleteId, setConfirmDeleteId] = useState(null); // For delete confirmation
+  const [selectedPatient, setSelectedPatient] = useState(null);
+  const [deletePatientId, setDeletePatientId] = useState(null);
 
   const navigate = useNavigate();
 
@@ -31,54 +33,16 @@ const DisplayUser = () => {
     }
   };
 
-  // ===== UPDATE PATIENT =====
   const handleEditClick = (patient) => {
     setSelectedPatient(patient);
     setShowPopup(true);
   };
 
-  const handleUpdate = async (e) => {
-    e.preventDefault();
-    try {
-      await updatePatient(selectedPatient.id, {
-        name: selectedPatient.name,
-        age: selectedPatient.age,
-        location: selectedPatient.location,
-      });
-
-      setMessage("✅ Patient updated successfully!");
-      setShowPopup(false);
-
-      setTimeout(() => {
-        setMessage("");
-        fetchPatients();
-      }, 2000);
-    } catch (err) {
-      setMessage(`❌ Update failed: ${err.message}`);
-      setTimeout(() => setMessage(""), 3000);
-    }
+  const handleDeleteClick = (id) => {
+    setDeletePatientId(id);
   };
 
-  // ===== DELETE PATIENT =====
-  const handleDelete = async (id) => {
-    setConfirmDeleteId(id); // Show inline confirmation instead of alert
-  };
-
-  const confirmDelete = async (id) => {
-    try {
-      await deletePatient(id);
-      setPatients(patients.filter((p) => p.id !== id));
-      setMessage("✅ Patient removed successfully!");
-      setConfirmDeleteId(null);
-
-      setTimeout(() => setMessage(""), 2000);
-    } catch (err) {
-      setMessage(`❌ Failed to delete patient: ${err.message}`);
-      setTimeout(() => setMessage(""), 3000);
-    }
-  };
-
-  const cancelDelete = () => setConfirmDeleteId(null);
+  const closeDeletePopup = () => setDeletePatientId(null);
 
   if (loading) return <p className="center-text">Loading patients...</p>;
   if (error) return <p className="error-text center-text">{error}</p>;
@@ -98,9 +62,6 @@ const DisplayUser = () => {
             </button>
           </div>
         </div>
-
-        {/* ===== MESSAGE ===== */}
-        {message && <p className="success-message">{message}</p>}
 
         {/* ===== TABLE ===== */}
         {patients.length === 0 ? (
@@ -129,24 +90,18 @@ const DisplayUser = () => {
                     <td>{patient.mobile}</td>
                     <td>{patient.location}</td>
                     <td className="actions">
-                      <button className="icon-btn edit" onClick={() => handleEditClick(patient)}>
+                      <button
+                        className="icon-btn edit"
+                        onClick={() => handleEditClick(patient)}
+                      >
                         <Pencil size={18} />
                       </button>
-
-                      {confirmDeleteId === patient.id ? (
-                        <>
-                          <button className="icon-btn confirm" onClick={() => confirmDelete(patient.id)}>
-                            Confirm
-                          </button>
-                          <button className="icon-btn cancel" onClick={cancelDelete}>
-                            Cancel
-                          </button>
-                        </>
-                      ) : (
-                        <button className="icon-btn delete" onClick={() => handleDelete(patient.id)}>
-                          <X size={18} />
-                        </button>
-                      )}
+                      <button
+                        className="icon-btn delete"
+                        onClick={() => handleDeleteClick(patient.id)}
+                      >
+                        <X size={18} />
+                      </button>
                     </td>
                   </tr>
                 ))}
@@ -155,45 +110,25 @@ const DisplayUser = () => {
           </div>
         )}
 
-        {/* ===== POPUP ===== */}
-        {showPopup && (
-          <div className="popup-overlay">
-            <div className="popup-content">
-              <h3>Update Patient</h3>
-              <form onSubmit={handleUpdate}>
-                <input
-                  type="text"
-                  name="name"
-                  value={selectedPatient.name}
-                  onChange={(e) => setSelectedPatient({ ...selectedPatient, name: e.target.value })}
-                  placeholder="Name"
-                  required
-                />
-                <input
-                  type="number"
-                  name="age"
-                  value={selectedPatient.age}
-                  onChange={(e) => setSelectedPatient({ ...selectedPatient, age: e.target.value })}
-                  placeholder="Age"
-                  required
-                />
-                <input
-                  type="text"
-                  name="location"
-                  value={selectedPatient.location}
-                  onChange={(e) => setSelectedPatient({ ...selectedPatient, location: e.target.value })}
-                  placeholder="Location"
-                  required
-                />
-                <div className="popup-buttons">
-                  <button type="submit" className="save-btn">Update</button>
-                  <button type="button" className="cancel-btn" onClick={() => setShowPopup(false)}>
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </div>
-          </div>
+        {/* ===== UPDATE POPUP ===== */}
+        {showPopup && selectedPatient && (
+          <UpdateUser
+            patient={selectedPatient}
+            onClose={() => setShowPopup(false)}
+            onSuccess={fetchPatients}
+          />
+        )}
+
+        {/* ===== DELETE POPUP ===== */}
+        {deletePatientId && (
+          <RemoveUser
+            patientId={deletePatientId}
+            onCancel={closeDeletePopup}
+            onSuccess={() => {
+              closeDeletePopup();
+              fetchPatients();
+            }}
+          />
         )}
       </div>
     </div>

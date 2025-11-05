@@ -115,16 +115,14 @@ const SearchUser = () => {
         {/* ✅ Error Message */}
         {error && <p className="error-text">{error}</p>}
 
-        {/* ✅ Go Back Button */}
-        {results.length > 0 && (
-          <button
-            className="go-back-btn"
-            onClick={() => navigate("/display")}
-            style={{ marginBottom: "10px" }}
-          >
-            Go Back
-          </button>
-        )}
+        {/* ✅ Go Back Button (Always Visible) */}
+        <button
+          className="go-back-btn"
+          onClick={() => navigate("/display")}
+          style={{ marginBottom: "15px" }}
+        >
+          Go Back
+        </button>
 
         {/* ✅ Results Table */}
         {results.length > 0 && (
