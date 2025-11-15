@@ -24,19 +24,20 @@ namespace REST_Services
         {
             services.AddControllers();
 
-            // ✅ Enable CORS for React frontend
+            // ✅ Enable CORS for all websites
             services.AddCors(options =>
             {
                 options.AddPolicy(name: AllowReactApp,
                     builder =>
                     {
                         builder
-                            .WithOrigins("http://localhost:3000")
+                            .WithOrigins("*") // Allows all origins
                             .AllowAnyHeader()
                             .AllowAnyMethod()
                             .AllowCredentials();
                     });
             });
+
 
             // Dependency Injection
             services.AddScoped<UserRepository>();
