@@ -1,19 +1,25 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   searchPatientByName,
   searchPatientByEmail,
   searchPatientByLocation,
+  searchPatientByMobile,
 } from "../../api/Crudapi";
 import "../../styles/SearchUser.css";
 
 const SearchUser = () => {
+  // ✅ State for search inputs
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [location, setLocation] = useState("");
+  const [mobile, setMobile] = useState("");
 
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  const navigate = useNavigate();
 
   const handleSearch = async (e) => {
     e.preventDefault();
@@ -22,37 +28,39 @@ const SearchUser = () => {
     setResults([]);
 
     try {
-      if (!name && !email && !location) {
+      if (!name && !email && !location && !mobile) {
         setError("Please enter at least one search criteria.");
         setLoading(false);
         return;
       }
 
-      // Fetch data for each field individually
+      // ✅ Build API calls dynamically
       const promises = [];
       if (name) promises.push(searchPatientByName(name));
       if (email) promises.push(searchPatientByEmail(email));
       if (location) promises.push(searchPatientByLocation(location));
+      if (mobile) promises.push(searchPatientByMobile(mobile));
 
       const responses = await Promise.all(promises);
 
-      // Flatten results
+      // ✅ Flatten results
       let combinedResults = responses.flat();
 
-      // Remove duplicates using patient ID or email as key
+      // ✅ Remove duplicates
       const uniqueMap = new Map();
       combinedResults.forEach((patient) => {
-        const key = patient.id || patient.email; // unique key
+        const key = patient.id || patient.email;
         if (!uniqueMap.has(key)) uniqueMap.set(key, patient);
       });
       combinedResults = Array.from(uniqueMap.values());
 
-      // Filter results to match all entered criteria
+      // ✅ Filter results to match all criteria
       combinedResults = combinedResults.filter((patient) => {
         return (
-          (!name || patient.name.toLowerCase().includes(name.toLowerCase())) &&
-          (!email || patient.email.toLowerCase().includes(email.toLowerCase())) &&
-          (!location || patient.location.toLowerCase().includes(location.toLowerCase()))
+          (!name || (patient.name || "").toLowerCase().includes(name.toLowerCase())) &&
+          (!email || (patient.email || "").toLowerCase().includes(email.toLowerCase())) &&
+          (!location || (patient.location || "").toLowerCase().includes(location.toLowerCase())) &&
+          (!mobile || (patient.mobile ? patient.mobile.toString() : "").toLowerCase().includes(mobile.toLowerCase()))
         );
       });
 
@@ -72,6 +80,8 @@ const SearchUser = () => {
     <div className="search-wrapper">
       <div className="search-container">
         <h2>Search Patients</h2>
+
+        {/* ✅ Search Form */}
         <form className="search-form" onSubmit={handleSearch}>
           <input
             type="text"
@@ -91,13 +101,30 @@ const SearchUser = () => {
             value={location}
             onChange={(e) => setLocation(e.target.value)}
           />
+          {/* <input
+            type="text"
+            placeholder="Mobile"
+            value={mobile}
+            onChange={(e) => setMobile(e.target.value)}
+          /> */}
           <button type="submit" disabled={loading}>
             {loading ? "Searching..." : "Search"}
           </button>
         </form>
 
+        {/* ✅ Error Message */}
         {error && <p className="error-text">{error}</p>}
 
+        {/* ✅ Go Back Button (Always Visible) */}
+        <button
+          className="go-back-btn"
+          onClick={() => navigate("/display")}
+          style={{ marginBottom: "15px" }}
+        >
+          Go Back
+        </button>
+
+        {/* ✅ Results Table */}
         {results.length > 0 && (
           <div className="table-container">
             <h3>Search Results</h3>

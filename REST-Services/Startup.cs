@@ -24,7 +24,7 @@ namespace REST_Services
         {
             services.AddControllers();
 
-            // ✅ Enable CORS for React frontend
+            // ✅ Enable CORS for all websites
             services.AddCors(options =>
             {
                 options.AddPolicy(name: AllowReactApp,
@@ -38,6 +38,7 @@ namespace REST_Services
                             
                     });
             });
+
 
             // Dependency Injection
             services.AddScoped<UserRepository>();

@@ -1,45 +1,51 @@
+// src/components/RemoveUser.jsx
 import React, { useState } from "react";
 import { deletePatient } from "../../api/Crudapi";
-import "../../styles/UserForms.css";
+import "../../styles/DisplayUser.css";
 
-const RemoveUser = () => {
-  const [userId, setUserId] = useState("");
+const RemoveUser = ({ patientId, onSuccess, onCancel }) => {
   const [loading, setLoading] = useState(false);
+  const [message, setMessage] = useState("");
 
-  const handleRemove = async (e) => {
-    e.preventDefault();
-    if (!userId) return alert("Please enter a valid ID.");
-    if (!window.confirm(`Remove user with ID ${userId}?`)) return;
-
-    setLoading(true);
+  const handleConfirm = async () => {
     try {
-      const result = await deletePatient(userId);
-      alert(`User with ID ${userId} removed successfully!`);
-      console.log(result);
-      setUserId("");
+      setLoading(true);
+      await deletePatient(patientId);
+      setMessage("✅ Patient removed successfully!");
+      setTimeout(() => {
+        setMessage("");
+        onSuccess();
+      }, 1500);
     } catch (err) {
-      alert(`Error: ${err.message}`);
+      setMessage(`❌ Failed to delete patient: ${err.message}`);
+      setTimeout(() => setMessage(""), 3000);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="user-page-wrapper">
-      <div className="user-form-container">
-        <h2>Remove Patient</h2>
-        <form className="user-form" onSubmit={handleRemove}>
-          <input
-            type="number"
-            placeholder="Enter Patient ID"
-            value={userId}
-            onChange={(e) => setUserId(e.target.value)}
-            required
-          />
-          <button type="submit" disabled={loading}>
-            {loading ? "Removing..." : "Remove"}
-          </button>
-        </form>
+    <div className="popup-overlay">
+      <div className="popup-content">
+        <h3>Confirm Delete</h3>
+        {message && <p className="success-message">{message}</p>}
+        {!message && (
+          <>
+            <p>Are you sure you want to remove this patient?</p>
+            <div className="popup-buttons">
+              <button
+                onClick={handleConfirm}
+                className="save-btn"
+                disabled={loading}
+              >
+                {loading ? "Deleting..." : "Confirm"}
+              </button>
+              <button onClick={onCancel} className="cancel-btn">
+                Cancel
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );

@@ -15,20 +15,20 @@ function App() {
   return (
     <Router>
       <Routes>
-        {/* 🔐 Public routes */}
+        {/* 🔓 Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* 🔒 Protected routes */}
+        {/* 🔒 Protected Routes */}
         <Route
           path="/*"
           element={
             <ProtectedRoute>
-              <>
+              <div className="app-layout">
                 <Navbar />
                 <div className="page-wrapper">
                   <Routes>
-                    <Route path="/" element={<Navigate to="/display" />} />
+                    <Route path="/" element={<Navigate to="/display" replace />} />
                     <Route path="/add" element={<AddUser />} />
                     <Route path="/remove" element={<RemoveUser />} />
                     <Route path="/display" element={<DisplayUser />} />
@@ -36,7 +36,7 @@ function App() {
                     <Route path="/search" element={<SearchUser />} />
                   </Routes>
                 </div>
-              </>
+              </div>
             </ProtectedRoute>
           }
         />
