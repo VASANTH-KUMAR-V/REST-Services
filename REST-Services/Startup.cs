@@ -31,10 +31,11 @@ namespace REST_Services
                     builder =>
                     {
                         builder
-                            .WithOrigins("http://localhost:3000")
+                            //.WithOrigins("http://localhost:3000")
+                            .AllowAnyOrigin()
                             .AllowAnyHeader()
-                            .AllowAnyMethod()
-                            .AllowCredentials();
+                            .AllowAnyMethod();
+                            
                     });
             });
 
@@ -55,13 +56,13 @@ namespace REST_Services
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
+            //if (env.IsDevelopment())
+            //{
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c =>
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "REST_Services v1"));
-            }
+            //}
 
             app.UseHttpsRedirection();
 
